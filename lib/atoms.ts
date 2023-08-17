@@ -2,7 +2,7 @@ import { atom } from "jotai";
 
 import { atomWithStorage } from "jotai/utils";
 
-type JobType = {jobId: string; prompt: string; status: "FINISHED" | "ERROR" | "PENDING"; url: string}
+type JobType = {jobId: string; prompt: string; status: "SUCCESS" | "ERROR" | "PENDING"; url: string}
 
 const jobsAtom = atomWithStorage<JobType[]>("sdxl-jobs", []);
 

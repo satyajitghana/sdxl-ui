@@ -19,6 +19,8 @@ const ImageJob = ({ job }: { job: JobType }) => {
   useEffect(() => {
     if (job.status === "PENDING") {
       const retry = setInterval(async () => {
+        // console.log(job);
+
         try {
           const response = await fetch(
             `${process.env.NEXT_PUBLIC_BACKEND_URL}/results?uid=${job.jobId}`,
@@ -30,31 +32,32 @@ const ImageJob = ({ job }: { job: JobType }) => {
           const resJson = await response.json();
 
           if (resJson["status"] === "ERROR") {
-            setJobs(
-              jobs.map((j) => {
+            setJobs([
+              ...jobs.map((j) => {
                 if (j.jobId === job.jobId) {
                   j.status = "ERROR";
                   return j;
                 }
 
                 return j;
-              })
-            );
+              }),
+            ]);
 
             clearInterval(retry);
           }
 
           if (resJson["status"] === "SUCCESS") {
-            setJobs(
-              jobs.map((j) => {
+            setJobs([
+              ...jobs.map((j) => {
                 if (j.jobId === job.jobId) {
                   j.url = resJson["url"];
+                  j.status = "SUCCESS";
                   return j;
                 }
 
                 return j;
-              })
-            );
+              }),
+            ]);
 
             clearInterval(retry);
           }
